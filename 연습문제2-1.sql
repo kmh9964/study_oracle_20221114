@@ -40,4 +40,4 @@ ORDER BY  commission_pct DESC;
 --7. 이름에 문자 Z가 포함된 사원의 사번과 이름을 조회
 SELECT employee_id ,first_name
 FROM employees
-WHERE first_name LIKE '%_Z%';
+WHERE first_name LIKE '%z%';
