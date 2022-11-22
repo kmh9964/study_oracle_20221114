@@ -78,6 +78,68 @@ FROM employees
 WHERE department_id IN (100,110)
 ORDER BY employee_id; 
 
+[예제3-14]
+--자신의 이메일 주소를 이용해서 @의 위치를 INSTR()으로 찾고,SUBSTR()로 조회
+SELECT  'raki82@hanmail.net' Email_addr,
+        SUBSTR('raki82@hanmail.net',1,INSTR('raki82@hanmail.net','@')-1)Email_id
+        --SUBSTR('raki82@hanmail.net',1,INSTR('raki82@hanmail.net','@')+1)Email_domain
+FROM dual;
+
+날짜 함수
+SELECT sysdate
+FROM dual;
+
+
+SELECT *
+FROM v$nls_parameters;
+
+ALTER SESSION SET nls_date_format = 'RR/MM/DD HH:MI:SS';
+
+SELECT ADD_MONTHS(SYSDATE,1) MONTH1
+FROM dual;
+
+SELECT TRUNC( MONTHS_BETWEEN(SYSDATE,'2022-11-14')) PASSED,
+       TRUNC(MONTHS_BETWEEN('2023-05-16',SYSDATE)) REMAINED
+FROM dual;
+
+
+SELECT NEXT_DAY(SYSDATE,'월요일') NEXT1, 
+       NEXT_DAY(SYSDATE,'금요일') NEXT2,
+       NEXT_DAY(SYSDATE,'일') NEXT3, 
+       NEXT_DAY(SYSDATE,4) NEXT4 
+FROM dual;
+
+SELECT *
+FROM v$nls_parameters;
+
+SELECT ROUND(TO_DATE('2013-06-30'),'yyyy') R1,
+       ROUND(TO_DATE('2013-07-01'),'YEAR') R2,
+       ROUND(TO_DATE('2013-12-15'),'MONTH') R3,
+       ROUND(TO_DATE('2013-12-16'),'MM') R4,
+       ROUND(TO_DATE('2013-05-27 11:59:59','YYYY-MM-DD HH24:MI:SS'),'DD') R5,
+       ROUND(TO_DATE('2013-05-27 12:00:00','YYYY-MM-DD HH24:MI:SS'),'DD') R6,
+       ROUND(TO_DATE('2013-05-29'),'DAY') R7,
+       ROUND(TO_DATE('2013-05-30'),'DAY') R8
+FROM dual;
+
+SELECT sysdate
+FROM dual;
+ALTER SESSION SET nls_date_format = 'RR/MM/DD HH:MI:SS';
+
+SELECT  TO_CHAR(sysdate,'YYYY-MONTH-DD')DATE_FMT1,
+        TO_CHAR(sysdate,'RR/MM/DD HH:MI:SS')DATE_FMT2,
+        TO_CHAR(sysdate,'YY-MM-DD DAY')DATE_FMT3
+FROM dual;
+
+
+
+
+
+
+
+
+
+
 
 
 
