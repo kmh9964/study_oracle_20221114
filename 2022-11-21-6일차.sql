@@ -126,17 +126,85 @@ SELECT sysdate
 FROM dual;
 ALTER SESSION SET nls_date_format = 'RR/MM/DD HH:MI:SS';
 
+
+[예제3-27]
 SELECT  TO_CHAR(sysdate,'YYYY-MONTH-DD')DATE_FMT1,
         TO_CHAR(sysdate,'RR/MM/DD HH:MI:SS')DATE_FMT2,
         TO_CHAR(sysdate,'YY-MM-DD DAY')DATE_FMT3
 FROM dual;
 
+{예제3-28]
+SELECT 1+'1' SUM
+FROM dual;
+
+SELECT TO_DATE('2013-05-27')DATE1
+FROM dual;
+
+SELECT employee_id EMP_ID, first_name||' ' ||last_name name, TO_CHAR (salary,'$99,999,999')
+FROM employees;
+
+[예제3-31]
+SELECT  employee_id emp_id,last_name name,salary, commission_pct*salary bonus,commission_pct
+FROM    employees
+WHERE   commission_pct*salary < 1000;
+ORDER BY  salary;
 
 
+******테이블 만드는 방법 ******
+create table contact(
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(30)NOT NULL,
+    home_num CHAR(11),
+    phone_num CHAR(11),
+    Office_num CHAR(11)
+)
+ INSERT INTO CINTACT
+ VALUES (1, '홍길동', '0623456789', null, null);
+ INSERT INTO CONTACT
+ VALUES (2, '이순신', NULL, '01026419964', null);
+ INSERT INTO CONTACT
+ VALUES (3, '홍두깨', 'NULL', NULL,'0612619967');
+ INSERT INTO CONTACT
+ VALUES (4, '하니', '0628979887', NULL,'0612619967');
+
+commit;--메모리에만 있는거지 정확히 저장하려면 commit;을 누르면 오라클이 알아서 저장함
+drop table contact;--테이블과 데이터를 삭제 명령
+
+SELECT *
+FROM contact;
 
 
+commit;--메모리에만 있는거지 정확히 저장하려면 commit;을 누르면 오라클이 알아서 저장함
+drop table contact;--테이블과 데이터를 삭제 명령
 
+[연습문제 3-4]
+사원의 사번,이름,부서, 매니저번호를 조회
+매니저가 있는 사원은 manager, 매니저가 없는 사원은 no manager로 표시
 
+select *
+from     employees;
+
+SELECT employee_id, first_name||' '||last_name name, department_id, NVL2(manager_ID,'manager','No manager')manager
+from     employees;
+
+[예제3-36]
+SELECT  employee_id 사번, first_name||' '||last_name 성명, department_id 부서,to_char(salary,'$9,999,999') 급여,
+        DECODE(department_id, 20, salary*0.2,
+                              30, salary*0.3,
+                              40, salary*0.4,
+                              0) 보너스
+from     employees 
+order by department_id;
+
+[예제 3-37]
+SELECT  employee_id 사번, first_name||' '||last_name 성명, department_id 부서,to_char(salary,'$9,999,999') 급여,
+        case department_id when 20 then salary*0.2
+                           when 30then salary*0.3
+                           when 40 then salary*0.4
+                           else 0
+         end bonus                           
+from     employees 
+order by department_id;
 
 
 
