@@ -1,18 +1,18 @@
 
- [¿¹Á¦ 5-1]
+ [ì˜ˆì œ 5-1]
 SELECT *
-FROM    EMPlOYEES; -- 107°Ç ¹ß»ı
-WHERE   --join Á¶°ÇÀÌ ¿Í¾ßµÈ´Ù
+FROM    EMPlOYEES; -- 107ê±´ ë°œìƒ
+WHERE   --join ì¡°ê±´ì´ ì™€ì•¼ëœë‹¤
 
 SELECT *
-FROM departments; --27°Ç ¹ß»ı
+FROM departments; --27ê±´ ë°œìƒ
 
 SELECT  employee_id,
         last_name,
         department_name
 FROM EMPlOYEES, departments; 
 
-[¿¹Á¦ 5-2]
+[ì˜ˆì œ 5-2]
 SELECT  e.employee_id, e.last_name,
         d.department_name
 FROM    EMPlOYEES e, departments d 
@@ -36,7 +36,7 @@ FROM    EMPlOYEES e, departments d
 WHERE   e.department_id = d.department_id
 
 
-[¿¹Á¦ 5-6]
+[ì˜ˆì œ 5-6]
 SELECT  e.employee_id, e.first_name, e.last_name,e.salary,
         d.department_name,
         j.job_title,
@@ -48,7 +48,7 @@ AND     d.location_id = l.location_id
 AND     e.employee_id = 101;
 
 
-[¿¹Á¦ 5-7]
+[ì˜ˆì œ 5-7]
 SELECT  e.employee_id, e.first_name, e.last_name,e.salary,
         j.job_title
 FROM    employees e, jobs j
@@ -59,7 +59,7 @@ AND     department_id = 10;
 SELECT  e.employee_id, e.last_name,
         d.department_name
 FROM    EMPlOYEES e, departments d 
-WHERE   e.department_id(+) = d.department_id  --NULL °ªÀÌ ºüÁ®¼­ 106°³¸¸ ³ª¿È
+WHERE   e.department_id(+) = d.department_id  --NULL ê°’ì´ ë¹ ì ¸ì„œ 106ê°œë§Œ ë‚˜ì˜´
 ORDER BY 1;       
 
 SELECT COUNT(*)
@@ -72,7 +72,7 @@ WHERE   e.department_id = d.department_id(+)
 ORDER BY 1;       
 
 
-[¿¹Á¦ 5-9]  
+[ì˜ˆì œ 5-9]  
 
 SELECT  e.employee_id, e.first_name, e.last_name,e.salary,
         d.department_name,
@@ -81,13 +81,22 @@ FROM    employees e, departments d,locations l
 WHERE   e.department_id = d.department_id(+)
 AND     d.location_id = l.location_id(+);
         
-[¿¹Á¦ 5-10]
+[ì˜ˆì œ 5-10]
 SELECT   e.employee_id, e.first_name, 
          m.employee_id manager_id, m.first_name manager_name
 FROM     employees e, employees m
 WHERE    e.manager_id = m.employee_id
 AND     e.manager_id IS NOT NULL
 ORDER BY 1;
+
+[ì˜ˆì œ 5-11]
+ë§¤ë‹ˆì €ê°€ ì—†ëŠ” ì‚¬ì›ì˜ ì‚¬ë²ˆ, ì´ë¦„ ì •ë³´ë¥¼ ì¡°íšŒ
+SELECT   e.employee_id, e.first_name, 
+         m.employee_id manager_id, m.first_name manager_name
+FROM     employees e, employees m
+WHERE    e.manager_id IS NOT NULL
+ORDER BY 1;
+
 
 
 
