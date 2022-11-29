@@ -77,3 +77,8 @@ ON      e.department_id = d.department_id
 where     e.manager_id IS NOT NULL
 ORDER BY 1;
 
+SELECT *
+FROM departments;
+
+SELECT *
+FROM EMPlOYEES;
