@@ -309,3 +309,166 @@ WHERE exists(SELECT department_id
                         FROM departments d
                         WHERE manager_id IS NOT NULL
                         AND e.department_id = d.department_id);
+ [예제 6-22]
+ 사원의 이름, 급여, 부서, 부서명 조회
+ SELECT e.first_name,e.salary,e.department_id,
+        d.department_name
+ FROM employees e, departments d
+ WHERE e.department_id = d.department_id;
+                        
+                        
+SELECT e.first_name,e.salary,e.department_id,
+       (select  department_name
+        from departments d
+        where d.department_id = e.department_id)
+ FROM employees e
+ order by e.department_id;
+                                            
+[예제 6-23]
+  SELECT first_name, salary, department_id,
+        (   SELECT ROUND(AVG(salary))
+            FROM    employees   ) avg_sal
+FROM    employees
+ORDER BY department_id;
+
+--일반쿼리로 조회
+select ROUND(AVG(salary))
+FROM employees;--6462
+ 
+SELECT employee_id, first_name, salary, department_id                      
+FROM employees
+WHERE salary >=6462;
+
+[연습문제 6-3]
+각 부서에 대해 부서코드, 부서명, 부서가 위치한 도시이름을 조회
+단, 스칼라 서브쿼리 사용
+--스칼라 서브쿼리 사용해서 조회
+SELECT d.department_id, d.department_name,
+       ( select city 
+         FROM locations l
+         where l. location_id = d.location_id)
+ FROM departments d
+ order by department_id;
+   
+-- 일반쿼리 : JOIN 연산 (오라클 조인)
+SELECT  d.department_id, d.department_name,
+        l.city
+FROM    departments d, locations l
+WHERE   d.location_id = l.location_id
+ORDER BY 1;
+
+-- 일반쿼리 : JOIN 연산 (ANSI 조인)
+SELECT  d.department_id, d.department_name,
+        l.city
+FROM    departments d INNER JOIN locations l
+ON   d.location_id = l.location_id
+ORDER BY 1;
+
+--(ANSI 조인 - 공통 컬럼)
+SELECT  d.department_id, d.department_name,
+        l.city
+FROM    departments d INNER JOIN locations l
+USING   (location_id)
+ORDER BY 1;   
+
+
+   --인라인 뷰--
+DESC EMP_DETAILS_VIEW
+
+SELECT *
+FROM EMP_DETAILS_VIEW;
+                        
+[예제 6-24]
+--일반쿼리를 이용해서 조회
+SELECT round(avg(SALARY))
+FROM employees; --6462
+
+SELECT MAX(SALARY) "1월"
+FROM employees; --24000
+
+SELECT employee_id, first_name, salary
+from employees 
+WHERE salary >=6462
+and salary <=24000;
+
+--인라인 뷰 이용해서 조회
+SELECT employee_id, first_name, salary, avg_sal, max_sal
+from employees,                       
+     (SELECT round(avg(SALARY)) avg_sal,
+      MAX(SALARY) max_sal
+      FROM employees)
+WHERE salary BETWEEN avg_sal AND max_sal;
+                   
+                        
+SELECT employee_id, first_name, salary, round(avg(SALARY)), MAX(SALARY)
+from employees; --오류가 뜬다
+    
+ [예제6-25]
+ 사원테이블에서 월별 입사현황 조회
+ 
+  [예제 6-27]                      
+사번, 이름을 10건 조회
+SELECT employee_id, last_name
+FROM employees
+ORDER BY 1;
+
+-ROWNUM 사용해서 10건 조회
+SELECT ROWNUM, employee_id, last_name
+FROM employees
+WHERE ROWNUM <= 10;                       
+                        
+ [예제 6-28]
+ 급여가 높은 상위 10명의 사원의 사번, 이름, 급여 정보 조회
+SELECT ROWNUM, employee_id, last_name, salary
+FROM employees
+WHERE ROWNUM <= 10
+order by salary DESC;--값이 안맞다
+
+SELECT * 
+FROM (SELECT employee_id, last_name, salary
+        FROM employees
+        ORDER BY salary DESC)
+WHERE ROWNUM <=10;
+
+SELECT employee_id, last_name, salary,
+       RANK() OVER (ORDER BY salary DESC) sal_rank
+FROM employees
+where rownum<=10;--값이 안맞다.
+
+
+랭크 함수 예제                                                
+SELECT  employee_id, last_name, salary,
+       RANK() OVER (ORDER BY salary DESC)sal_rank1,--표현형식1,2,3,3,5,,,
+       DENSE_RANK()OVER (ORDER BY salary DESC) sal_rank2,--표현형식 1,2,3,3,4....
+        ROW_NUMBER()OVER (ORDER BY salary DESC) sal_NUM1--표현형식 1,2,3,4,
+FROM employees;
+                        
+ [연습문제 6-4]
+1. 급여가 적은 상위 5명 사원의 순위, 사번, 이름, 급여를 조회
+ 단, 인라인뷰 서브쿼리를 사용해서 작성
+ 
+ --ROWNUM 함수 이용
+ SELECT * 
+FROM (SELECT employee_id, last_name, salary
+        FROM employees
+        ORDER BY salary  )
+WHERE ROWNUM <=5;--2100~2400
+
+--랭크 함수 이용
+SELECT * 
+from      (select RANK() OVER (ORDER BY salary )sal_rank,
+          employee_id, last_name, salary       
+            FROM employees)  
+WHERE    ROWNUM <=5;         
+
+[연습문제 6-4] 
+2.부서별로 가장 급여를 많이 받는 사원의 사번, 이름, 부서번호, 급여,업무코드를 조회
+단,인라인뷰 서브쿼리를 사용
+SELECT e.employee_id, e.last_name, e.department_id, e.salary, e.job_id
+FROM employees e,( select department_id, MAX(salary) max_sal
+                FROM employees
+                GROUP BY department_id) k
+WHERE NVL(e.department_id,0) = NVL(K.department_id,0)--NULL 데이터는 무조건 처리
+AND e.salary = k.max_sal
+ORDER BY 1;--12개 나옴 
+                
