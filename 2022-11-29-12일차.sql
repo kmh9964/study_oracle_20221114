@@ -97,16 +97,53 @@ WHERE  location_id IN( SELECT LOCATION_ID
                         FROM locations                    
                         WHERE country_id = 'UK');                 
                    
-                   
-SELECT *
+SELECT department_id, location_id, department_name
+FROM departments                  
+WHERE  location_id = any( SELECT LOCATION_ID
+                        FROM locations                    
+                        WHERE country_id = 'UK'); --2                    
+SELECT location_id
 FROM locations                    
-WHERE country_id = 'UK';
+WHERE country_id = 'UK';--2400,2500,2600
 
 SELECT department_id, location_id, department_name
 FROM departments                    
-WHERE location_id IN (2400,2500,2600);                 
-                   
-                   
+WHERE location_id IN (2400,2500,2600);  --2              
+
+SELECT department_id, location_id, department_name
+FROM departments                    
+WHERE location_id = any  (2400,2500,2600); --2                
+                      
+[예제 6-6]
+70번 부서원의 급여보다 높은 급여를 받는 사원의 사번, 이름, 부서번호, 급여를 급여순으로 조회
+--일반쿼리로 작성
+select salary
+from employees
+where department_id = 70;--10000
+
+select employee_id, last_name, department_id, salary
+from employees
+where salary>10000;--15
+
+select employee_id, last_name, department_id, salary
+from employees
+where salary > (select salary
+            from employees
+            where department_id = 70);--15
+            
+ select salary
+from employees
+where department_id = 80
+order by 1;--6100~14000까지 나옴
+
+select employee_id, last_name, department_id, salary
+from employees
+where salary > any (select salary
+                    from employees
+                    where department_id = 80);--54개 ,6100보다 높은 가격이 나옴,그래서 >min이랑 같은 값
+           
+
+
  [예제 6-8]
  10번 부서원의 급여보다 적은 급여를  받는 사원의 사번, 이름, 부서번호, 급여 조회
  

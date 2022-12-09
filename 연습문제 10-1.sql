@@ -154,3 +154,4 @@ ADD CONSTRAINT episode_id_fk FOREIGN KEY (episode_id) REFERENCES star_wars (epis
 ALTER TABLE casting
 ADD CONSTRAINT character_id_fk FOREIGN KEY (character_id) REFERENCES characters (character_id); 
 
+commit;

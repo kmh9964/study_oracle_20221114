@@ -141,3 +141,30 @@ insert into emp_test
 values (101,'kong',300,'AC_MGR');
 
 COMMIT;
+
+
+
+
+select employee_id, first_name, last_name, hire_date, job_id, department_id
+from employees
+where department_id in (10,20);
+
+select* 
+from month_salary;
+
+
+insert into month_salary (dept_id)
+select department_id
+from employees
+where department_id is not null
+group by department_id;
+
+insert into emp
+select employee_id, first_name, last_name, hire_date, job_id,salary,commission_pct,department_id
+from employees
+where department_id between 30 and 60;
+
+select* 
+from emp;
+
+
